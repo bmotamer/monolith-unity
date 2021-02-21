@@ -7,19 +7,19 @@ using UnityEngine.ResourceManagement.ResourceProviders;
 namespace Monolith.Unity.Tasks
 {
     
-    public sealed class LazySceneAssetTask : ILazyTask
+    public sealed class LoadSceneAssetTask : ILazyTask
     {
         
         public AsyncOperationHandle<SceneInstance> Handle { get; private set; }
         
         private readonly object _reference;
 
-        public LazySceneAssetTask(object reference)
+        public LoadSceneAssetTask(object reference)
         {
             _reference = reference;
         }
         
-        public LazySceneAssetTask(Func<object> reference)
+        public LoadSceneAssetTask(Func<object> reference)
         {
             _reference = reference;
         }

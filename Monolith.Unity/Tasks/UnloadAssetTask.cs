@@ -8,9 +8,9 @@ namespace Monolith.Unity.Tasks
     public sealed class UnloadAssetTask<T> : ILazyTask
     {
         
-        private readonly LazyAssetTask<T> _task;
+        private readonly LoadAssetTask<T> _task;
 
-        public UnloadAssetTask(LazyAssetTask<T> task) : base()
+        public UnloadAssetTask(LoadAssetTask<T> task) : base()
         {
             _task = task;
         }

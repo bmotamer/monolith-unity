@@ -12,9 +12,9 @@ namespace Monolith.Unity.Tasks
         
         public AsyncOperationHandle<SceneInstance> Handle { get; private set; }
         
-        private readonly LazySceneAssetTask _task;
+        private readonly LoadSceneAssetTask _task;
 
-        public UnloadSceneAssetTask(LazySceneAssetTask task) : base()
+        public UnloadSceneAssetTask(LoadSceneAssetTask task) : base()
         {
             _task = task;
         }
