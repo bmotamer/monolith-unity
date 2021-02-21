@@ -8,7 +8,7 @@ namespace Monolith.Unity.Physics
     public sealed class PhysicsManager2D : PhysicsManager
     {
 
-        private readonly PhysicsScene2D _world;
+        private PhysicsScene2D _world;
 
         public PhysicsManager2D(Scene scene) : base()
         {

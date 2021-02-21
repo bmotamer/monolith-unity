@@ -71,9 +71,14 @@ namespace Monolith.States
 
                         break;
                     case StateState.Loading:
-                        isDone = !currentState.Load(game);
-
-                        if (!isDone) _state = StateState.Loaded;
+                        if (currentState.Load(game))
+                        {
+                            _state = StateState.Loaded;
+                        }
+                        else
+                        {
+                            isDone = true;
+                        }
 
                         break;
                     case StateState.Loaded:

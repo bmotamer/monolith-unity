@@ -9,7 +9,7 @@ namespace Monolith.Unity.Physics
     public sealed class PhysicsManager3D : PhysicsManager
     {
 
-        private readonly PhysicsScene _world;
+        private PhysicsScene _world;
 
         public PhysicsManager3D(Scene scene) : base()
         {
