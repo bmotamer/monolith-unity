@@ -35,14 +35,14 @@ namespace Monolith.Unity.Physics
 
         #endregion
 
-        #region CastBall
+        #region CastSphere
 
-        public bool CastBall(Vector3 origin, float radius, Vector3 direction, out RaycastHit hitInfo, float maxDistance = Mathf.Infinity, int layerMask = Physics3D.DefaultRaycastLayers, QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal)
+        public bool CastSphere(Vector3 origin, float radius, Vector3 direction, out RaycastHit hitInfo, float maxDistance = Mathf.Infinity, int layerMask = Physics3D.DefaultRaycastLayers, QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal)
         {
             return _world.SphereCast(origin, radius, direction, out hitInfo, maxDistance, layerMask, queryTriggerInteraction);
         }
 
-        public int CastBall(Vector3 origin, float radius, Vector3 direction, RaycastHit[] results, float maxDistance = Mathf.Infinity, int layerMask = Physics3D.DefaultRaycastLayers, QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal)
+        public int CastSphere(Vector3 origin, float radius, Vector3 direction, RaycastHit[] results, float maxDistance = Mathf.Infinity, int layerMask = Physics3D.DefaultRaycastLayers, QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal)
         {
             return _world.SphereCast(origin, radius, direction, results, maxDistance, layerMask, queryTriggerInteraction);
         }
@@ -77,9 +77,9 @@ namespace Monolith.Unity.Physics
 
         #endregion
 
-        #region OverlapBall
+        #region OverlapSphere
 
-        public int OverlapBall(Vector3 position, float radius, Collider[] results, int layerMask = Physics3D.AllLayers, QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal)
+        public int OverlapSphere(Vector3 position, float radius, Collider[] results, int layerMask = Physics3D.AllLayers, QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal)
         {
             return _world.OverlapSphere(position, radius, results, layerMask, queryTriggerInteraction);
         }
@@ -104,7 +104,7 @@ namespace Monolith.Unity.Physics
 
         #endregion
 
-        protected override void Simulate(float fixedDeltaTime) => _world.Simulate(fixedDeltaTime);
+        protected override void SimulateInternal(float fixedDeltaTime) => _world.Simulate(fixedDeltaTime);
 
     }
 

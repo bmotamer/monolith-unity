@@ -9,7 +9,7 @@ namespace Monolith.States
 
         public readonly StateTreeStatic Tree;
 
-        private readonly Stack<IState> _stack;
+        private readonly Stack<State> _stack;
 
         private Type _target;
         private StateState _state;
@@ -18,16 +18,16 @@ namespace Monolith.States
         {
             Tree = tree;
 
-            _stack = new Stack<IState>(1);
+            _stack = new Stack<State>(1);
             _target = Tree.GetDefault().Type;
             _state = StateState.Uninitialized;
         }
 
-        public T Get<T>() where T : IState
+        public T Get<T>() where T : State
         {
             T result = default;
 
-            foreach (IState state in _stack)
+            foreach (State state in _stack)
             {
                 if (state is T castedState)
                 {
@@ -39,7 +39,7 @@ namespace Monolith.States
             return result;
         }
 
-        public void SetTarget<T>() where T : IState
+        public void SetTarget<T>() where T : State
         {
             Type target = typeof(T);
 
@@ -54,16 +54,17 @@ namespace Monolith.States
 
             do
             {
-                IState currentState = _stack.Count == 0 ? null : _stack.Peek();
+                State currentState = _stack.Count == 0 ? null : _stack.Peek();
 
                 Type current = currentState?.GetType();
                 Type parent = Tree.GetParent(current)?.Type;
-                Type next = Tree.GetNext(current, _target)?.Type;
+                StateTreeNode nextNode = Tree.GetNext(current, _target);
+                Type next = nextNode?.Type;
 
                 switch (_state)
                 {
                     case StateState.Uninitialized:
-                        currentState = (IState)Activator.CreateInstance(next, game);
+                        currentState = nextNode.Make(game);
 
                         _stack.Push(currentState);
 
@@ -97,7 +98,8 @@ namespace Monolith.States
 
                         break;
                     case StateState.Activating:
-                        if (currentState.Enter(game)) _state = StateState.Active;
+                        currentState.Enter(game);
+                        _state = StateState.Active;
 
                         isDone = true;
 
@@ -111,7 +113,7 @@ namespace Monolith.States
 
         internal void OnUpdate(Game game)
         {
-            IState currentState = _stack.Peek();
+            State currentState = _stack.Peek();
 
             Type current = currentState.GetType();
             Type next = Tree.GetNext(current, _target).Type;
@@ -130,7 +132,7 @@ namespace Monolith.States
 
             do
             {
-                IState currentState = _stack.Count == 0 ? null : _stack.Peek();
+                State currentState = _stack.Count == 0 ? null : _stack.Peek();
 
                 Type current = currentState?.GetType();
                 Type parent = Tree.GetParent(current)?.Type;
@@ -148,9 +150,9 @@ namespace Monolith.States
 
                         break;
                     case StateState.Deactivating:
-                        isDone = !currentState.Exit(game);
-
-                        if (!isDone) _state = StateState.Loaded;
+                        currentState.Exit(game);
+                        isDone = false;
+                        _state = StateState.Loaded;
 
                         break;
                     case StateState.Loaded:

@@ -46,14 +46,7 @@ namespace Monolith.States
                     }
                 }
 
-                if (backtrack)
-                {
-                    next = Get(currentPath, currentPath.Length - 1);
-                }
-                else
-                {
-                    next = Get(targetPath, currentPath.Length + 1);
-                }
+                next = backtrack ? Get(currentPath, currentPath.Length - 1) : Get(targetPath, currentPath.Length + 1);
             }
 
             return next;

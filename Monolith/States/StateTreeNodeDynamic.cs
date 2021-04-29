@@ -7,7 +7,7 @@ namespace Monolith.States
     public sealed class StateTreeNodeDynamic : StateTreeNode
     {
 
-        public StateTreeNodeDynamic(Type type) : base(type, new List<StateTreeNode>())
+        public StateTreeNodeDynamic(Type type, Func<Game, State> make) : base(type, make, new List<StateTreeNode>())
         {
         }
 
@@ -15,11 +15,11 @@ namespace Monolith.States
 
         public StateTreeNodeStatic AsStatic()
         {
-            StateTreeNode[] children = new StateTreeNode[_children.Count];
+            var children = new StateTreeNode[_children.Count];
 
             for (int i = 0; i < _children.Count; ++i) children[i] = ((StateTreeNodeDynamic)_children[i]).AsStatic();
 
-            return new StateTreeNodeStatic(Type, children);
+            return new StateTreeNodeStatic(Type, Make, children);
         }
 
     }

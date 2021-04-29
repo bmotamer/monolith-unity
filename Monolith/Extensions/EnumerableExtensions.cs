@@ -39,11 +39,11 @@ namespace Monolith.Extensions
 
         public static bool HasDuplicates<T>(this IEnumerable<T> enumerable, IEqualityComparer<T> comparer = null)
         {
-            if (comparer is null) comparer = EqualityComparer<T>.Default;
+            comparer ??= EqualityComparer<T>.Default;
             
             bool result = false;
 
-            IList<T> list = enumerable.ToIList();
+            var list = enumerable.ToIList();
             
             for (int i = 0; i < list.Count; ++i)
             {

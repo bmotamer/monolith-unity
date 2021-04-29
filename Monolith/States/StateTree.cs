@@ -16,11 +16,11 @@ namespace Monolith.States
             _paths = paths;
         }
 
-        public bool Contains<T>() where T : IState => Contains(typeof(T));
+        public bool Contains<T>() where T : State => Contains(typeof(T));
 
         internal bool Contains(Type type) => _paths.ContainsKey(type);
 
-        public StateTreeNode Get<T>() where T : IState => Get(typeof(T));
+        public StateTreeNode Get<T>() where T : State => Get(typeof(T));
 
         internal StateTreeNode Get(Type type)
         {
@@ -33,7 +33,7 @@ namespace Monolith.States
 
         public abstract StateTreeNode GetDefault();
 
-        public StateTreeNode GetParent<T>() where T : IState => GetParent(typeof(T));
+        public StateTreeNode GetParent<T>() where T : State => GetParent(typeof(T));
 
         internal StateTreeNode GetParent(Type type)
         {
@@ -44,7 +44,7 @@ namespace Monolith.States
             return node;
         }
 
-        public StateTreeNode GetRoot<T>() where T : IState => GetRoot(typeof(T));
+        public StateTreeNode GetRoot<T>() where T : State => GetRoot(typeof(T));
 
         internal StateTreeNode GetRoot(Type type)
         {

@@ -1,7 +1,5 @@
-﻿using Monolith;
-using System;
+﻿using System;
 using UnityEngine;
-
 using UnityObject = UnityEngine.Object;
 
 namespace Monolith.Unity
@@ -9,17 +7,19 @@ namespace Monolith.Unity
 
     public static class Bootstrapper
     {
-
-        public static T Run<T>() where T : Game
+        
+        public static void Run<T>(Func<IEventListener, T> make) where T : Game
         {
-            GameObject gameObject = new GameObject("EventListener");
-            gameObject.hideFlags = HideFlags.HideAndDontSave;
+            var gameObject = new GameObject("EventListener")
+            {
+                hideFlags = HideFlags.HideAndDontSave
+            };
 
             UnityObject.DontDestroyOnLoad(gameObject);
 
             IEventListener eventListener = gameObject.AddComponent<EventListener>();
 
-            return (T)Activator.CreateInstance(typeof(T), eventListener);
+            make(eventListener);
         }
 
     }

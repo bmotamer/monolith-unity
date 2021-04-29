@@ -9,11 +9,10 @@ namespace Monolith.Unity.Tasks
     public sealed class UnloadSceneTask : ILazyTask
     {
         
-        public AsyncOperation Handle { get; private set; }
-        
         private readonly Scene _scene;
+        private AsyncOperation _handle;
 
-        public UnloadSceneTask(Scene scene) : base()
+        public UnloadSceneTask(Scene scene)
         {
             if (!scene.IsValid()) throw new ArgumentException();
             
@@ -22,14 +21,13 @@ namespace Monolith.Unity.Tasks
         
         public void Start()
         {
-            if (Handle != null) throw new InvalidOperationException();
+            if (_handle != null) throw new InvalidOperationException();
 
-            Handle = SceneManager.UnloadSceneAsync(_scene);
+            _handle = SceneManager.UnloadSceneAsync(_scene);
         }
 
-        public bool IsDone => Handle.isDone;
-        public float Progress => Handle.progress;
-        object ILazyTask.Result => null;
+        public bool IsDone => _handle.isDone;
+        public float Progress => _handle.progress;
         
     }
     

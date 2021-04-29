@@ -69,29 +69,29 @@ namespace Monolith.Unity.Physics
 
         #endregion
 
-        #region CastBall
+        #region CastCircle
 
-        public RaycastHit2D CastBall(Vector2 origin, float radius, Vector2 direction, float distance, int layerMask = Physics2D.DefaultRaycastLayers)
+        public RaycastHit2D CastCircle(Vector2 origin, float radius, Vector2 direction, float distance, int layerMask = Physics2D.DefaultRaycastLayers)
         {
             return _world.CircleCast(origin, radius, direction, distance, layerMask);
         }
 
-        public RaycastHit2D CastBall(Vector2 origin, float radius, Vector2 direction, float distance, ContactFilter2D contactFilter)
+        public RaycastHit2D CastCircle(Vector2 origin, float radius, Vector2 direction, float distance, ContactFilter2D contactFilter)
         {
             return _world.CircleCast(origin, radius, direction, distance, contactFilter);
         }
 
-        public int CastBall(Vector2 origin, float radius, Vector2 direction, float distance, RaycastHit2D[] results, int layerMask = Physics2D.DefaultRaycastLayers)
+        public int CastCircle(Vector2 origin, float radius, Vector2 direction, float distance, RaycastHit2D[] results, int layerMask = Physics2D.DefaultRaycastLayers)
         {
             return _world.CircleCast(origin, radius, direction, distance, results, layerMask);
         }
 
-        public int CastBall(Vector2 origin, float radius, Vector2 direction, float distance, ContactFilter2D contactFilter, RaycastHit2D[] results)
+        public int CastCircle(Vector2 origin, float radius, Vector2 direction, float distance, ContactFilter2D contactFilter, RaycastHit2D[] results)
         {
             return _world.CircleCast(origin, radius, direction, distance, contactFilter, results);
         }
 
-        public int CastBall(Vector2 origin, float radius, Vector2 direction, float distance, ContactFilter2D contactFilter, List<RaycastHit2D> results)
+        public int CastCircle(Vector2 origin, float radius, Vector2 direction, float distance, ContactFilter2D contactFilter, List<RaycastHit2D> results)
         {
             return _world.CircleCast(origin, radius, direction, distance, contactFilter, results);
         }
@@ -185,29 +185,29 @@ namespace Monolith.Unity.Physics
 
         #endregion
 
-        #region OverlapBall
+        #region OverlapCircle
 
-        public Collider2D OverlapBall(Vector2 point, float radius, int layerMask = Physics2D.DefaultRaycastLayers)
+        public Collider2D OverlapCircle(Vector2 point, float radius, int layerMask = Physics2D.DefaultRaycastLayers)
         {
             return _world.OverlapCircle(point, radius, layerMask);
         }
 
-        public Collider2D OverlapBall(Vector2 point, float radius, ContactFilter2D contactFilter)
+        public Collider2D OverlapCircle(Vector2 point, float radius, ContactFilter2D contactFilter)
         {
             return _world.OverlapCircle(point, radius, contactFilter);
         }
 
-        public int OverlapBall(Vector2 point, float radius, Collider2D[] results, int layerMask = Physics2D.DefaultRaycastLayers)
+        public int OverlapCircle(Vector2 point, float radius, Collider2D[] results, int layerMask = Physics2D.DefaultRaycastLayers)
         {
             return _world.OverlapCircle(point, radius, results, layerMask);
         }
 
-        public int OverlapBall(Vector2 point, float radius, ContactFilter2D contactFilter, Collider2D[] results)
+        public int OverlapCircle(Vector2 point, float radius, ContactFilter2D contactFilter, Collider2D[] results)
         {
             return _world.OverlapCircle(point, radius, contactFilter, results);
         }
 
-        public int OverlapBall(Vector2 point, float radius, ContactFilter2D contactFilter, List<Collider2D> results)
+        public int OverlapCircle(Vector2 point, float radius, ContactFilter2D contactFilter, List<Collider2D> results)
         {
             return _world.OverlapCircle(point, radius, contactFilter, results);
         }
@@ -297,7 +297,7 @@ namespace Monolith.Unity.Physics
 
         #endregion
 
-        protected override void Simulate(float fixedDeltaTime) => _world.Simulate(fixedDeltaTime);
+        protected override void SimulateInternal(float fixedDeltaTime) => _world.Simulate(fixedDeltaTime);
 
     }
 

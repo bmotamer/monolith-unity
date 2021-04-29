@@ -13,9 +13,7 @@ namespace Monolith
 
         protected Game(IEventListener eventListener)
         {
-            if (eventListener == null) throw new ArgumentNullException(nameof(eventListener));
-            
-            _eventListener = eventListener;
+            _eventListener = eventListener ?? throw new ArgumentNullException(nameof(eventListener));
 
             _eventListener.OnFrameEnter += Update;
             _eventListener.OnFrameExit += LateUpdate;

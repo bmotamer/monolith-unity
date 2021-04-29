@@ -7,7 +7,13 @@ namespace Monolith.Tasks
         void Start();
         bool IsDone { get; }
         float Progress { get; }
-        object Result { get; }
+        
+    }
+
+    public interface ILazyTask<T> : ILazyTask
+    {
+        
+        T Result { get; }
         
     }
 

@@ -9,12 +9,12 @@ namespace Monolith.Unity.Tasks
     
     public sealed class UnloadSceneAssetTask : ILazyTask
     {
-        
-        public AsyncOperationHandle<SceneInstance> Handle { get; private set; }
+
+        internal AsyncOperationHandle<SceneInstance> Handle;
         
         private readonly LoadSceneAssetTask _task;
 
-        public UnloadSceneAssetTask(LoadSceneAssetTask task) : base()
+        public UnloadSceneAssetTask(LoadSceneAssetTask task)
         {
             _task = task;
         }
@@ -28,7 +28,6 @@ namespace Monolith.Unity.Tasks
 
         public bool IsDone => Handle.IsDone;
         public float Progress => Handle.PercentComplete;
-        object ILazyTask.Result => null;
         
     }
     

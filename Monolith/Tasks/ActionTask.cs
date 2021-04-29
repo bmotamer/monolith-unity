@@ -8,7 +8,7 @@ namespace Monolith.Tasks
 
         private readonly Action _action;
         
-        public ActionTask(Action action) : base()
+        public ActionTask(Action action)
         {
             _action = action;
         }
@@ -24,7 +24,6 @@ namespace Monolith.Tasks
 
         public bool IsDone { get; private set; }
         public float Progress => IsDone ? 1F : 0F;
-        public object Result => null;
         
     }
     
