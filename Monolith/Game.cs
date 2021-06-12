@@ -7,41 +7,46 @@ namespace Monolith
     public abstract class Game
     {
 
-        public readonly StateManager StateManager;
+        public readonly GameStateManager StateManager;
 
-        private readonly IEventListener _eventListener;
+        private readonly IGameEngineListener _engineListener;
 
-        protected Game(IEventListener eventListener)
+        public GameTime Time { get; private set; }
+
+        protected Game(IGameEngineListener engineListener)
         {
-            _eventListener = eventListener ?? throw new ArgumentNullException(nameof(eventListener));
+            _engineListener = engineListener ?? throw new ArgumentNullException(nameof(engineListener));
 
-            _eventListener.OnFrameEnter += Update;
-            _eventListener.OnFrameExit += LateUpdate;
-            _eventListener.OnDispose += Dispose;
+            _engineListener.OnFrameEnter += OnFrameEnter;
+            _engineListener.OnFrameExit += OnFrameExit;
+            _engineListener.OnDispose += OnDispose;
 
-            StateTreeStatic stateTree = CreateStateTree();
+            GameStateTreeStatic stateTree = CreateStateTree();
 
-            StateManager = new StateManager(stateTree);
+            StateManager = new GameStateManager(stateTree);
         }
 
-        protected abstract StateTreeStatic CreateStateTree();
+        protected abstract GameStateTreeStatic CreateStateTree();
+        protected abstract GameTime CaptureTime();
 
-        private void Update()
+        private void OnFrameEnter()
         {
-            StateManager.OnStartOfFrame(this);
-            StateManager.OnUpdate(this);
+            Time = CaptureTime();
+            
+            StateManager.BeginFrame(this);
+            StateManager.Update(this);
         }
 
-        private void LateUpdate()
+        private void OnFrameExit()
         {
-            StateManager.OnEndOfFrame(this);
+            StateManager.EndFrame(this);
         }
 
-        private void Dispose()
+        private void OnDispose()
         {
-            _eventListener.OnFrameEnter -= Update;
-            _eventListener.OnFrameExit -= LateUpdate;
-            _eventListener.OnDispose -= Dispose;
+            _engineListener.OnFrameEnter -= OnFrameEnter;
+            _engineListener.OnFrameExit -= OnFrameExit;
+            _engineListener.OnDispose -= OnDispose;
         }
 
     }

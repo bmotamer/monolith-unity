@@ -5,6 +5,7 @@ namespace Monolith.Tasks
     {
 
         void Start();
+        void Update();
         bool IsDone { get; }
         float Progress { get; }
         

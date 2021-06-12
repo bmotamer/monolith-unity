@@ -6,18 +6,21 @@ using UnityEngine.SceneManagement;
 namespace Monolith.Unity.Tasks
 {
     
-    public sealed class UnloadSceneTask : ILazyTask
+    public sealed class LazyUnloadSceneTask : ILazyTask
     {
         
         private readonly Scene _scene;
         private AsyncOperation _handle;
 
-        public UnloadSceneTask(Scene scene)
+        public LazyUnloadSceneTask(Scene scene)
         {
             if (!scene.IsValid()) throw new ArgumentException();
             
             _scene = scene;
         }
+        
+        public bool IsDone => (_handle != null) && _handle.isDone;
+        public float Progress => _handle == null ? 0.0F : _handle.progress;
         
         public void Start()
         {
@@ -25,10 +28,11 @@ namespace Monolith.Unity.Tasks
 
             _handle = SceneManager.UnloadSceneAsync(_scene);
         }
-
-        public bool IsDone => _handle.isDone;
-        public float Progress => _handle.progress;
         
+        public void Update()
+        {
+        }
+
     }
     
 }

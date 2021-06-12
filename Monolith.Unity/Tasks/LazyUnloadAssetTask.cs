@@ -6,15 +6,18 @@ using UnityObject = UnityEngine.Object;
 namespace Monolith.Unity.Tasks
 {
     
-    public sealed class UnloadAssetTask<T> : ILazyTask where T : UnityObject
+    public sealed class LazyUnloadAssetTask<T> : ILazyTask where T : UnityObject
     {
         
-        private readonly LoadAssetTask<T> _task;
+        private readonly LazyLoadAssetTask<T> _task;
 
-        public UnloadAssetTask(LoadAssetTask<T> task)
+        public LazyUnloadAssetTask(LazyLoadAssetTask<T> task)
         {
             _task = task;
         }
+        
+        public bool IsDone { get; private set; }
+        public float Progress => IsDone ? 1F : 0F;
         
         public void Start()
         {
@@ -24,10 +27,11 @@ namespace Monolith.Unity.Tasks
 
             IsDone = true;
         }
-
-        public bool IsDone { get; private set; }
-        public float Progress => IsDone ? 1F : 0F;
         
+        public void Update()
+        {
+        }
+
     }
     
 }

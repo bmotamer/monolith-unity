@@ -6,7 +6,7 @@ namespace Monolith.Unity
 
     [AddComponentMenu("")]
     [DisallowMultipleComponent]
-    public sealed class EventListener : MonoBehaviour, IEventListener
+    public sealed class UnityEngineListener : MonoBehaviour, IGameEngineListener
     {
 
         public event Action OnFrameEnter;

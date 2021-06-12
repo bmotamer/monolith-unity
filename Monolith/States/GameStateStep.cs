@@ -1,7 +1,7 @@
 ﻿namespace Monolith.States
 {
 
-    public enum StateState : byte
+    public enum GameStateStep : byte
     {
 
         Uninitialized,

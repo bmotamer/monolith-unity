@@ -1,10 +1,10 @@
 namespace Monolith.States
 {
     
-    public abstract class State
+    public abstract class GameState
     {
         
-        protected State(Game game)
+        protected GameState(Game game)
         {
         }
         

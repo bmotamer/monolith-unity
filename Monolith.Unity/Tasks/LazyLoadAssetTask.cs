@@ -7,17 +7,21 @@ using UnityObject = UnityEngine.Object;
 namespace Monolith.Unity.Tasks
 {
     
-    public sealed class LoadAssetTask<T> : ILazyTask<T> where T : UnityObject
+    public sealed class LazyLoadAssetTask<T> : ILazyTask<T> where T : UnityObject
     {
 
         internal AsyncOperationHandle<T> Handle;
         
         private readonly Func<object> _reference;
 
-        public LoadAssetTask(Func<object> reference)
+        public LazyLoadAssetTask(Func<object> reference)
         {
             _reference = reference;
         }
+        
+        public bool IsDone => Handle.IsDone;
+        public float Progress => Handle.PercentComplete;
+        public T Result => Handle.Result;
         
         public void Start()
         {
@@ -26,10 +30,10 @@ namespace Monolith.Unity.Tasks
             Handle = Addressables.LoadAssetAsync<T>(_reference());
         }
 
-        public bool IsDone => Handle.IsDone;
-        public float Progress => Handle.PercentComplete;
-        public T Result => Handle.Result;
-        
+        public void Update()
+        {
+        }
+
     }
     
 }

@@ -4,30 +4,29 @@ using System.Collections.Generic;
 namespace Monolith.States
 {
 
-    public sealed class StateManager
+    public sealed class GameStateManager
     {
 
-        public readonly StateTreeStatic Tree;
+        public readonly GameStateTreeStatic Tree;
 
-        private readonly Stack<State> _stack;
-
+        private readonly Stack<GameState> _stack;
         private Type _target;
-        private StateState _state;
+        private GameStateStep _step;
 
-        public StateManager(StateTreeStatic tree)
+        public GameStateManager(GameStateTreeStatic tree)
         {
             Tree = tree;
 
-            _stack = new Stack<State>(1);
-            _target = Tree.GetDefault().Type;
-            _state = StateState.Uninitialized;
+            _stack = new Stack<GameState>(1);
+            _target = Tree.Default.Type;
+            _step = GameStateStep.Uninitialized;
         }
 
-        public T Get<T>() where T : State
+        public T Find<T>() where T : GameState
         {
-            T result = default;
+            T result = null;
 
-            foreach (State state in _stack)
+            foreach (GameState state in _stack)
             {
                 if (state is T castedState)
                 {
@@ -39,7 +38,7 @@ namespace Monolith.States
             return result;
         }
 
-        public void SetTarget<T>() where T : State
+        public void SetTarget<T>() where T : GameState
         {
             Type target = typeof(T);
 
@@ -48,33 +47,33 @@ namespace Monolith.States
             _target = target;
         }
 
-        internal void OnStartOfFrame(Game game)
+        internal void BeginFrame(Game game)
         {
             bool isDone = false;
 
             do
             {
-                State currentState = _stack.Count == 0 ? null : _stack.Peek();
+                GameState currentState = _stack.Count == 0 ? null : _stack.Peek();
 
                 Type current = currentState?.GetType();
-                Type parent = Tree.GetParent(current)?.Type;
-                StateTreeNode nextNode = Tree.GetNext(current, _target);
+                Type parent = Tree.FindParent(current)?.Type;
+                GameStateTreeNode nextNode = Tree.FindNext(current, _target);
                 Type next = nextNode?.Type;
 
-                switch (_state)
+                switch (_step)
                 {
-                    case StateState.Uninitialized:
+                    case GameStateStep.Uninitialized:
                         currentState = nextNode.Make(game);
 
                         _stack.Push(currentState);
 
-                        _state = StateState.Loading;
+                        _step = GameStateStep.Loading;
 
                         break;
-                    case StateState.Loading:
+                    case GameStateStep.Loading:
                         if (currentState.Load(game))
                         {
-                            _state = StateState.Loaded;
+                            _step = GameStateStep.Loaded;
                         }
                         else
                         {
@@ -82,14 +81,14 @@ namespace Monolith.States
                         }
 
                         break;
-                    case StateState.Loaded:
+                    case GameStateStep.Loaded:
                         if (current == next)
                         {
-                            _state = StateState.Activating;
+                            _step = GameStateStep.Activating;
                         }
                         else if (next != parent)
                         {
-                            _state = StateState.Uninitialized;
+                            _step = GameStateStep.Uninitialized;
                         }
                         else
                         {
@@ -97,9 +96,9 @@ namespace Monolith.States
                         }
 
                         break;
-                    case StateState.Activating:
+                    case GameStateStep.Activating:
                         currentState.Enter(game);
-                        _state = StateState.Active;
+                        _step = GameStateStep.Active;
 
                         isDone = true;
 
@@ -111,57 +110,57 @@ namespace Monolith.States
             } while (!isDone);
         }
 
-        internal void OnUpdate(Game game)
+        internal void Update(Game game)
         {
-            State currentState = _stack.Peek();
+            GameState currentState = _stack.Peek();
 
             Type current = currentState.GetType();
-            Type next = Tree.GetNext(current, _target).Type;
+            Type next = Tree.FindNext(current, _target).Type;
 
             bool isTarget = current == next;
 
-            if (isTarget && (_state == StateState.Active))
+            if (isTarget && (_step == GameStateStep.Active))
             {
                 currentState.Update(game);
             }
         }
 
-        internal void OnEndOfFrame(Game game)
+        internal void EndFrame(Game game)
         {
             bool isDone;
 
             do
             {
-                State currentState = _stack.Count == 0 ? null : _stack.Peek();
+                GameState currentState = _stack.Count == 0 ? null : _stack.Peek();
 
                 Type current = currentState?.GetType();
-                Type parent = Tree.GetParent(current)?.Type;
-                Type next = Tree.GetNext(current, _target)?.Type;
+                Type parent = Tree.FindParent(current)?.Type;
+                Type next = Tree.FindNext(current, _target)?.Type;
 
-                switch (_state)
+                switch (_step)
                 {
                     default:
                         isDone = true;
                         break;
-                    case StateState.Active:
+                    case GameStateStep.Active:
                         isDone = current == next;
 
-                        if (!isDone) _state = StateState.Deactivating;
+                        if (!isDone) _step = GameStateStep.Deactivating;
 
                         break;
-                    case StateState.Deactivating:
+                    case GameStateStep.Deactivating:
                         currentState.Exit(game);
                         isDone = false;
-                        _state = StateState.Loaded;
+                        _step = GameStateStep.Loaded;
 
                         break;
-                    case StateState.Loaded:
+                    case GameStateStep.Loaded:
                         isDone = next != parent;
 
-                        if (!isDone) _state = StateState.Unloading;
+                        if (!isDone) _step = GameStateStep.Unloading;
 
                         break;
-                    case StateState.Unloading:
+                    case GameStateStep.Unloading:
                         isDone = !currentState.Unload(game);
 
                         if (!isDone)
@@ -170,11 +169,11 @@ namespace Monolith.States
 
                             if (_stack.Count == 0)
                             {
-                                _state = StateState.Uninitialized;
+                                _step = GameStateStep.Uninitialized;
                             }
                             else
                             {
-                                _state = StateState.Loaded;
+                                _step = GameStateStep.Loaded;
                             }
                         }
                         break;

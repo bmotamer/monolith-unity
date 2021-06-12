@@ -7,6 +7,9 @@ namespace Monolith.Unity.Physics
     {
 
         private float _timeSinceLastSimulation;
+        private bool _isSimulating;
+
+        public long SimulationCount { get; private set; }
 
         protected PhysicsManager()
         {
@@ -31,10 +34,16 @@ namespace Monolith.Unity.Physics
         {
             if (fixedDeltaTime < 0.0F) throw new ArgumentOutOfRangeException(nameof(fixedDeltaTime));
             if (_timeSinceLastSimulation < fixedDeltaTime) throw new ArgumentOutOfRangeException(nameof(fixedDeltaTime));
+            if (_isSimulating) throw new InvalidOperationException("Nested simulations are not allowed.");
 
-            _timeSinceLastSimulation -= fixedDeltaTime;
+            _isSimulating = true;
 
             SimulateInternal(fixedDeltaTime);
+            
+            _timeSinceLastSimulation -= fixedDeltaTime;
+            ++SimulationCount;
+
+            _isSimulating = false;
         }
 
         protected abstract void SimulateInternal(float fixedDeltaTime);

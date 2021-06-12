@@ -3,7 +3,7 @@
 namespace Monolith
 {
 
-    public interface IEventListener
+    public interface IGameEngineListener
     {
 
         event Action OnFrameEnter;

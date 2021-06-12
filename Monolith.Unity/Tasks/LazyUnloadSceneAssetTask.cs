@@ -7,29 +7,32 @@ using UnityEngine.ResourceManagement.ResourceProviders;
 namespace Monolith.Unity.Tasks
 {
     
-    public sealed class LoadSceneAssetTask : ILazyTask<SceneInstance>
+    public sealed class LazyUnloadSceneAssetTask : ILazyTask
     {
 
         internal AsyncOperationHandle<SceneInstance> Handle;
         
-        private readonly Func<object> _reference;
-        
-        public LoadSceneAssetTask(Func<object> reference)
+        private readonly LazyLoadSceneAssetTask _task;
+
+        public LazyUnloadSceneAssetTask(LazyLoadSceneAssetTask task)
         {
-            _reference = reference;
+            _task = task;
         }
+        
+        public bool IsDone => Handle.IsDone;
+        public float Progress => Handle.PercentComplete;
         
         public void Start()
         {
             if (Handle.IsValid()) throw new InvalidOperationException();
-
-            Handle = Addressables.LoadSceneAsync(_reference());
+            
+            Handle = Addressables.UnloadSceneAsync(_task.Handle);
+        }
+        
+        public void Update()
+        {
         }
 
-        public bool IsDone => Handle.IsDone;
-        public float Progress => Handle.PercentComplete;
-        public SceneInstance Result => Handle.Result;
-        
     }
     
 }

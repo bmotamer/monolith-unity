@@ -1,60 +1,78 @@
 using System;
 using System.Collections.ObjectModel;
-using Monolith.Extensions;
 
 namespace Monolith.Tasks
 {
     
-    public sealed class LazyTaskSequence
+    public sealed class LazyTaskSequence : ILazyTask
     {
 
         public readonly ReadOnlyCollection<ILazyTask> Tasks;
         
         public int TaskIndex { get; private set; }
-        
+
         public LazyTaskSequence(params ILazyTask[] tasks)
         {
-            if (tasks.HasNulls() || tasks.HasDuplicates()) throw new ArgumentException(nameof(tasks));
-
             Tasks = new ReadOnlyCollection<ILazyTask>(tasks);
             TaskIndex = -1;
         }
-
-        public bool Update()
+        
+        public bool IsDone => TaskIndex >= Tasks.Count;
+        
+        public float Progress
         {
-            bool isDone = false;
-
-            if (TaskIndex < 0)
+            get
             {
-                if (Tasks.Count == 0)
+                float progress;
+
+                if (IsDone)
                 {
-                    isDone = true;
+                    progress = 1.0F;
                 }
                 else
                 {
-                    Tasks[0].Start();
-                    TaskIndex = 0;   
-                }
-            }
-            else
-            {
-                if (Tasks[TaskIndex].IsDone)
-                {
-                    if (TaskIndex == (Tasks.Count - 1))
-                    {
-                        isDone = true;
-                    }
-                    else
-                    {
-                        ++TaskIndex;
-                        Tasks[TaskIndex].Start();
-                    }
-                }
-            }
+                    progress = 0.0F;
 
-            return isDone;
+                    if (Tasks.Count > 0)
+                    {
+                        foreach (ILazyTask task in Tasks) progress += task.Progress;
+
+                        progress /= Tasks.Count;
+                    }
+                }
+
+                return progress;
+            }
         }
 
+        public void Start()
+        {
+            if (TaskIndex >= 0) throw new InvalidOperationException();
+
+            TaskIndex = 0;
+            
+            if (!IsDone) Tasks[0].Start();
+        }
+        
+        public void Update()
+        {
+            if (TaskIndex < 0) throw new InvalidOperationException();
+            
+            while (!IsDone)
+            {
+                ILazyTask task = Tasks[TaskIndex];
+                task.Update();
+                
+                if (!task.IsDone) break;
+                
+                ++TaskIndex;
+
+                if (TaskIndex >= Tasks.Count) break;
+                    
+                Tasks[TaskIndex].Start();
+            }
+        }
+        
     }
     
 }
