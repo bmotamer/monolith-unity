@@ -6,7 +6,7 @@ namespace Monolith.Unity.Editor
 {
     
     [CustomEditor(typeof(GameBootProfileSelector))]
-    public sealed class GameBuildProfileSelectorEditor : UnityEditor.Editor
+    public sealed class GameBootProfileSelectorEditor : UnityEditor.Editor
     {
         
         public override void OnInspectorGUI()
