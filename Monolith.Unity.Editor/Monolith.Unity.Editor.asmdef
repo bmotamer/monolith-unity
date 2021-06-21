@@ -1,13 +1,13 @@
 {
-    "name": "Monolith.Unity",
-    "rootNamespace": "Monolith.Unity",
+    "name": "Monolith.Unity.Editor",
+    "rootNamespace": "Monolith.Unity.Editor",
     "references": [
         "Monolith",
-        "Unity.Addressables",
-        "Unity.ResourceManager",
-        "Unity.InputSystem"
+        "Monolith.Unity"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": true,
     "overrideReferences": false,

@@ -10,7 +10,7 @@ namespace Monolith.Unity
     public abstract class UnityGame : Game
     {
         
-        protected UnityGame(UnityEngineListener engineListener) : base(engineListener)
+        protected UnityGame(GameEngineListener engineListener, IGameBootOptions bootOptions) : base(engineListener, bootOptions)
         {
             InputSystem.settings.updateMode = InputSettings.UpdateMode.ProcessEventsManually;
 
