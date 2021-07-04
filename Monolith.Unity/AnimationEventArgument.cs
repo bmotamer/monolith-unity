@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Monolith.Unity.Utilities
+namespace Monolith.Unity
 {
 
     public readonly struct AnimationEventArgument

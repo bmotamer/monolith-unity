@@ -1,4 +1,4 @@
-namespace Monolith.Unity.Utilities
+namespace Monolith.Unity
 {
 
     public enum AnimationEventArgumentType : byte

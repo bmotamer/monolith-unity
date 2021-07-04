@@ -1,15 +1,15 @@
 using UnityEngine;
 
-namespace Monolith.Unity.Utilities
+namespace Monolith.Unity
 {
 
-    public delegate void AnimationEventListenerEvent(Animator animator, in AnimationEventArgument value);
+    public delegate void AnimationEventListenerTrigger(Animator animator, in AnimationEventArgument arg);
 
     [RequireComponent(typeof(Animator)), DisallowMultipleComponent]
     public sealed class AnimationEventListener : MonoBehaviour
     {
 
-        public event AnimationEventListenerEvent OnEvent;
+        public event AnimationEventListenerTrigger OnTrigger;
 
         private Animator _animator;
 
@@ -18,19 +18,20 @@ namespace Monolith.Unity.Utilities
             _animator = GetComponent<Animator>();
         }
 
-        private void Event() => OnEvent?.Invoke(_animator, default);
+        private void Trigger() => OnTrigger?.Invoke(_animator, default);
 
-        private void Event(float value) => OnEvent?.Invoke(_animator, new AnimationEventArgument(value));
+        private void Trigger(float value) => OnTrigger?.Invoke(_animator, new AnimationEventArgument(value));
 
-        private void Event(int value) => OnEvent?.Invoke(_animator, new AnimationEventArgument(value));
+        private void Trigger(int value) => OnTrigger?.Invoke(_animator, new AnimationEventArgument(value));
 
-        private void Event(string value) => OnEvent?.Invoke(_animator, new AnimationEventArgument(value));
+        private void Trigger(string value) => OnTrigger?.Invoke(_animator, new AnimationEventArgument(value));
 
-        private void Event(Object value) => OnEvent?.Invoke(_animator, new AnimationEventArgument(value));
+        private void Trigger(Object value) => OnTrigger?.Invoke(_animator, new AnimationEventArgument(value));
 
         private void OnDestroy()
         {
             _animator = null;
+            OnTrigger = null;
         }
 
     }
