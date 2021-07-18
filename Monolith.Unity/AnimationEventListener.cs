@@ -20,13 +20,13 @@ namespace Monolith.Unity
 
         private void Trigger() => OnTrigger?.Invoke(_animator, default);
 
-        private void Trigger(float value) => OnTrigger?.Invoke(_animator, new AnimationEventArgument(value));
+        private void TriggerFloat(float value) => OnTrigger?.Invoke(_animator, new AnimationEventArgument(value));
 
-        private void Trigger(int value) => OnTrigger?.Invoke(_animator, new AnimationEventArgument(value));
+        private void TriggerInt(int value) => OnTrigger?.Invoke(_animator, new AnimationEventArgument(value));
 
-        private void Trigger(string value) => OnTrigger?.Invoke(_animator, new AnimationEventArgument(value));
+        private void TriggerString(string value) => OnTrigger?.Invoke(_animator, new AnimationEventArgument(value));
 
-        private void Trigger(Object value) => OnTrigger?.Invoke(_animator, new AnimationEventArgument(value));
+        private void TriggerObject(Object value) => OnTrigger?.Invoke(_animator, new AnimationEventArgument(value));
 
         private void OnDestroy()
         {

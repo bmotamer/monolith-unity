@@ -3,6 +3,7 @@ using Monolith.Tasks;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
+using UnityEngine.SceneManagement;
 
 namespace Monolith.Unity.Tasks
 {
@@ -27,7 +28,7 @@ namespace Monolith.Unity.Tasks
         {
             if (Handle.IsValid()) throw new InvalidOperationException();
 
-            Handle = Addressables.LoadSceneAsync(_reference());
+            Handle = Addressables.LoadSceneAsync(_reference(), LoadSceneMode.Additive, false);
         }
         
         public void Update()
