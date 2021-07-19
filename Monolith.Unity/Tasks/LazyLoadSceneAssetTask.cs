@@ -28,7 +28,7 @@ namespace Monolith.Unity.Tasks
         {
             if (Handle.IsValid()) throw new InvalidOperationException();
 
-            Handle = Addressables.LoadSceneAsync(_reference(), LoadSceneMode.Additive, false);
+            Handle = Addressables.LoadSceneAsync(_reference(), LoadSceneMode.Additive);
         }
         
         public void Update()
